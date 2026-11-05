@@ -1,0 +1,19 @@
+[
+  {"p_id":"PM-JN-01","store":"JN","p_name":"选址签约","p_group":"deco","p_owner":"开发部·王磊","p_status":"done","p_plan":"2026-10-10","p_upload":"2026-10-08","p_accept":"2026-10-10","p_gate":false},
+  {"p_id":"PM-JN-02","store":"JN","p_name":"门店装修施工","p_group":"deco","p_owner":"装修群·陈工","p_status":"done","p_plan":"2026-10-28","p_upload":"2026-10-25","p_accept":"2026-10-28","p_gate":false},
+  {"p_id":"PM-JN-03","store":"JN","p_name":"消防验收","p_group":"deco","p_owner":"安环部·赵队","p_status":"done","p_plan":"2026-11-02","p_upload":"2026-11-01","p_accept":"2026-11-02","p_gate":true},
+  {"p_id":"PM-JN-04","store":"JN","p_name":"电力增容验收","p_group":"deco","p_owner":"设备群·李工","p_status":"overdue","p_plan":"2026-11-03","p_upload":"2026-11-04","p_accept":null,"p_gate":true,"note":"⚠ 已逾期，供电局增容手续未闭环，冷柜/生鲜无法带电验收。"},
+  {"p_id":"PM-JN-05","store":"JN","p_name":"开业综合验收","p_group":"open","p_owner":"店长·刘俊材","p_status":"pending","p_plan":"2026-11-17","p_upload":null,"p_accept":null,"p_gate":false},
+
+  {"p_id":"PM-CX-01","store":"CX","p_name":"选址签约","p_group":"deco","p_owner":"开发部·王磊","p_status":"done","p_plan":"2026-10-15","p_upload":"2026-10-13","p_accept":"2026-10-15","p_gate":false},
+  {"p_id":"PM-CX-02","store":"CX","p_name":"门店装修施工","p_group":"deco","p_owner":"装修群·陈工","p_status":"done","p_plan":"2026-11-05","p_upload":"2026-11-04","p_accept":"2026-11-05","p_gate":false},
+  {"p_id":"PM-CX-03","store":"CX","p_name":"消防验收","p_group":"deco","p_owner":"安环部·赵队","p_status":"done","p_plan":"2026-11-08","p_upload":"2026-11-07","p_accept":"2026-11-08","p_gate":true},
+  {"p_id":"PM-CX-04","store":"CX","p_name":"电力增容验收","p_group":"deco","p_owner":"设备群·李工","p_status":"doing","p_plan":"2026-11-10","p_upload":"2026-11-06","p_accept":null,"p_gate":true},
+  {"p_id":"PM-CX-05","store":"CX","p_name":"开业综合验收","p_group":"open","p_owner":"店长·刘俊材","p_status":"pending","p_plan":"2026-11-22","p_upload":null,"p_accept":null,"p_gate":false},
+
+  {"p_id":"PM-GX-01","store":"GX","p_name":"选址签约","p_group":"deco","p_owner":"开发部·王磊","p_status":"done","p_plan":"2026-10-12","p_upload":"2026-10-10","p_accept":"2026-10-12","p_gate":false},
+  {"p_id":"PM-GX-02","store":"GX","p_name":"门店装修施工","p_group":"deco","p_owner":"装修群·陈工","p_status":"done","p_plan":"2026-11-02","p_upload":"2026-11-01","p_accept":"2026-11-02","p_gate":false},
+  {"p_id":"PM-GX-03","store":"GX","p_name":"消防验收","p_group":"deco","p_owner":"安环部·赵队","p_status":"doing","p_plan":"2026-11-07","p_upload":null,"p_accept":null,"p_gate":true,"note":"🔴 距计划验收仅 2 天，喷淋改造未完成，存在闸门临期风险。"},
+  {"p_id":"PM-GX-04","store":"GX","p_name":"电力增容验收","p_group":"deco","p_owner":"设备群·李工","p_status":"done","p_plan":"2026-11-03","p_upload":"2026-11-03","p_accept":"2026-11-03","p_gate":true},
+  {"p_id":"PM-GX-05","store":"GX","p_name":"开业综合验收","p_group":"open","p_owner":"店长·刘俊材","p_status":"pending","p_plan":"2026-11-20","p_upload":null,"p_accept":null,"p_gate":false}
+]
