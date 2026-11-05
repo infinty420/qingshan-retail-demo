@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>青杉生活超市 · 新店开业筹备数智化平台</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- 登录（演示鉴权：店长 / 区域总监）-->
+<div id="login">
+  <div class="login-card">
+    <h2>青杉生活超市</h2>
+    <div class="sub">新店开业筹备数智化平台 · 多端协同（只读试点）</div>
+    <label>姓名 / 工号</label>
+    <input id="lu-name" placeholder="如：刘俊材 / 区域总监·周总" value="刘俊材">
+    <label>角色</label>
+    <select id="lu-role">
+      <option value="店长">店长（看板 / 预警）</option>
+      <option value="区域总监">区域总监（可人工签核闸门）</option>
+    </select>
+    <button class="btn" id="lu-btn">进入平台</button>
+    <div class="hint">演示账号，无需密码 · 多开浏览器可体验实时协同</div>
+  </div>
+</div>
+
+<!-- 主应用 -->
+<div id="app" style="display:none">
+  <header class="top">
+    <div>
+      <h1>青杉生活超市 · 新店开业筹备数智化平台
+        <span class="pill">只读试点</span><span class="pill">AI 不代签</span></h1>
+      <div class="sub">从「人治」到「数治」——三系统只读对齐 · AI 依赖识别 · 实时看板 · SSE 实时协同 · 安全硬闸门</div>
+    </div>
+    <div class="userbox">
+      <span class="live" id="live"><i></i><span id="liveTxt">实时连接中</span></span>
+      <span class="role" id="uRole">店长</span>
+      <button id="logout">退出</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="stores" id="stores"></div>
+    <div class="kpis" id="kpis"></div>
+
+    <div class="toolbar">
+      <div class="tabs">
+        <div class="tab active" data-tab="dash">📋 实时筹备看板</div>
+        <div class="tab" data-tab="graph">🕸 AI 依赖图谱</div>
+        <div class="tab" data-tab="alert">🔔 智能预警中心</div>
+        <div class="tab" data-tab="safe">🛡 安全硬闸门</div>
+        <div class="tab" data-tab="audit">🧾 审计留痕</div>
+      </div>
+      <button class="sync-btn" id="syncBtn">🔄 三系统只读同步</button>
+      <button class="sim-btn" id="simBtn">⚠ 模拟典型事故</button>
+    </div>
+
+    <div class="panel active" id="p-dash"><div class="groups" id="groups"></div></div>
+    <div class="panel" id="p-graph">
+      <div class="graph-card">
+        <div id="graphHost"></div>
+        <div class="legend">
+          <span><i style="background:var(--green)"></i>已完成</span>
+          <span><i style="background:var(--amber)"></i>进行中/临期</span>
+          <span><i style="background:var(--red)"></i>逾期/阻塞（关键路径）</span>
+          <span><i style="background:var(--gray)"></i>未开始</span>
+          <span><i style="background:#fff;border:1px solid #f3b5b5"></i>虚线=安全闸门依赖</span>
+        </div>
+        <div class="note" id="graphNote" style="margin-top:10px"></div>
+      </div>
+    </div>
+    <div class="panel" id="p-alert"><div id="alerts"></div></div>
+    <div class="panel" id="p-safe">
+      <div class="safe-grid" id="safeGrid"></div>
+      <div class="gate-banner" id="gateBanner"></div>
+    </div>
+    <div class="panel" id="p-audit"><div id="auditList"></div></div>
+  </div>
+</div>
+
+<div class="modal-mask" id="modalMask">
+  <div class="modal">
+    <h3 id="mTitle">提示</h3>
+    <div id="mBody"></div>
+    <div class="row"><button class="btn" id="mOk">知道了</button></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
