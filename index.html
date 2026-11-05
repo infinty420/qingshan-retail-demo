@@ -1,0 +1,560 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>青杉生活超市 · 新店开业筹备数智化平台（Demo）</title>
+<style>
+  :root{
+    --navy:#15315E; --blue:#2F6FED; --blue-soft:#eef3fb; --ink:#1f2a37;
+    --green:#16a34a; --amber:#f59e0b; --red:#dc2626; --gray:#94a3b8;
+    --line:#b8c4d6; --bg:#f6f8fc; --card:#fff;
+    --shadow:0 1px 3px rgba(21,49,94,.08),0 6px 18px rgba(21,49,94,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Microsoft YaHei","Noto Sans SC","PingFang SC",sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.55;}
+  header.top{background:linear-gradient(120deg,var(--navy),#1d3f73);color:#fff;padding:16px 22px;}
+  header.top h1{margin:0;font-size:19px;font-weight:700;letter-spacing:.5px}
+  header.top .sub{font-size:12.5px;opacity:.82;margin-top:3px}
+  .pill{display:inline-block;font-size:11px;padding:2px 9px;border-radius:20px;margin-left:8px;
+    background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);vertical-align:middle}
+  .wrap{max-width:1180px;margin:0 auto;padding:18px 18px 60px}
+  /* store switch */
+  .stores{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 16px}
+  .store-btn{flex:1;min-width:200px;background:var(--card);border:1.5px solid var(--line);
+    border-radius:12px;padding:11px 14px;cursor:pointer;text-align:left;transition:.15s;box-shadow:var(--shadow)}
+  .store-btn:hover{border-color:var(--blue)}
+  .store-btn.active{border-color:var(--blue);background:var(--blue-soft)}
+  .store-btn .nm{font-weight:700;font-size:14.5px;color:var(--navy)}
+  .store-btn .st{font-size:11.5px;color:var(--gray);margin-top:2px}
+  .store-btn .tag{font-size:11px;font-weight:700;float:right;padding:1px 8px;border-radius:6px}
+  .tag.ok{background:#e7f6ec;color:var(--green)}
+  .tag.risk{background:#fdeaea;color:var(--red)}
+  /* KPI */
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+  .kpi{background:var(--card);border-radius:12px;padding:14px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .kpi .lab{font-size:12px;color:var(--gray)}
+  .kpi .val{font-size:26px;font-weight:800;color:var(--navy);margin-top:4px}
+  .kpi .delta{font-size:11.5px;margin-top:2px}
+  .kpi .bar{height:6px;border-radius:4px;background:#eef1f6;margin-top:10px;overflow:hidden}
+  .kpi .bar > i{display:block;height:100%;border-radius:4px}
+  .up{color:var(--red)} .down{color:var(--green)}
+  /* tabs */
+  .tabs{display:flex;gap:6px;border-bottom:2px solid #e4e9f2;margin-bottom:16px;flex-wrap:wrap}
+  .tab{padding:9px 16px;cursor:pointer;font-size:14px;color:var(--gray);border-bottom:3px solid transparent;margin-bottom:-2px;font-weight:600}
+  .tab:hover{color:var(--blue)}
+  .tab.active{color:var(--blue);border-bottom-color:var(--blue)}
+  .panel{display:none;animation:fade .2s}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  /* dashboard */
+  .groups{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .gcol{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:12px}
+  .gcol h3{margin:2px 0 10px;font-size:14px;color:var(--navy);display:flex;align-items:center;gap:8px}
+  .gcol h3 .dot{width:9px;height:9px;border-radius:50%}
+  .task{border:1px solid #e7ecf4;border-radius:9px;padding:9px 10px;margin-bottom:9px;cursor:pointer;transition:.15s;background:#fff}
+  .task:hover{border-color:var(--blue);box-shadow:0 2px 8px rgba(47,111,237,.12)}
+  .task .tn{font-size:13px;font-weight:600;color:var(--ink);display:flex;justify-content:space-between;gap:6px}
+  .task .code{font-size:10.5px;color:var(--gray);font-family:ui-monospace,Menlo,Consolas,monospace}
+  .task .meta{font-size:11px;color:var(--gray);margin-top:4px;display:flex;justify-content:space-between}
+  .st-badge{font-size:10px;font-weight:700;padding:1px 7px;border-radius:5px;white-space:nowrap}
+  .s-done{background:#e7f6ec;color:var(--green)} .s-prog{background:#fff4e0;color:#b9740a}
+  .s-over{background:#fdeaea;color:var(--red)} .s-block{background:#fdeaea;color:var(--red);border:1px solid #f3b5b5}
+  .s-pend{background:#eef1f6;color:#64748b}
+  .prog{height:5px;background:#eef1f6;border-radius:3px;margin-top:6px;overflow:hidden}
+  .prog > i{display:block;height:100%}
+  .gate-flag{font-size:9.5px;color:var(--red);font-weight:700;margin-left:5px;border:1px solid #f3b5b5;border-radius:4px;padding:0 4px}
+  /* graph */
+  .graph-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:14px}
+  svg{width:100%;height:auto;display:block}
+  .gnode rect{rx:9}
+  .gnode text{font-size:11px;font-weight:600;fill:#fff;dominant-baseline:middle}
+  .gnode .code{font-size:8.5px;fill:rgba(255,255,255,.85);font-weight:400}
+  .edge{stroke:#9fb0c8;stroke-width:1.6;fill:none}
+  .edge.crit{stroke:var(--red);stroke-width:2.4}
+  .edge-label{font-size:9px;fill:#64748b;font-family:ui-monospace,monospace}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--gray);margin-top:8px}
+  .legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+  /* alerts */
+  .alert{display:flex;gap:12px;background:var(--card);border-radius:12px;box-shadow:var(--shadow);
+    padding:12px 14px;margin-bottom:10px;border-left:4px solid var(--amber)}
+  .alert.red{border-left-color:var(--red)}
+  .alert.green{border-left-color:var(--green)}
+  .alert .ic{font-size:20px;line-height:1}
+  .alert .hd{font-weight:700;font-size:13.5px;color:var(--navy)}
+  .alert .bd{font-size:12.5px;color:#475569;margin-top:2px}
+  .alert .tm{font-size:11px;color:var(--gray);margin-top:3px}
+  /* safety */
+  .safe-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .safe-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);padding:14px;border-top:4px solid var(--red)}
+  .safe-card h3{margin:0 0 4px;font-size:14.5px;color:var(--navy)}
+  .safe-card .desc{font-size:11.5px;color:var(--gray);margin-bottom:10px}
+  .chk{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px dashed #eef1f6;font-size:13px}
+  .chk:last-child{border-bottom:none}
+  .chk input{width:17px;height:17px;accent-color:var(--red)}
+  .chk .ok{color:var(--green);font-weight:700;font-size:11px;margin-left:auto}
+  .chk .no{color:var(--red);font-weight:700;font-size:11px;margin-left:auto}
+  .gate-banner{background:linear-gradient(120deg,#fdeaea,#fff);border:1.5px solid #f3b5b5;border-radius:10px;
+    padding:13px 15px;margin-top:14px;color:#7f1d1d;font-size:13px;display:flex;gap:10px;align-items:flex-start}
+  .gate-banner b{color:var(--red)}
+  /* modal */
+  .modal-mask{position:fixed;inset:0;background:rgba(15,23,42,.5);display:none;align-items:center;justify-content:center;z-index:50}
+  .modal-mask.show{display:flex}
+  .modal{background:#fff;border-radius:14px;max-width:440px;width:90%;padding:20px 22px;box-shadow:0 20px 60px rgba(0,0,0,.3);animation:fade .2s}
+  .modal h3{margin:0 0 8px;color:var(--navy);font-size:16px}
+  .modal p{font-size:13px;color:#475569;margin:6px 0}
+  .modal .row{display:flex;gap:10px;margin-top:16px}
+  .btn{background:var(--blue);color:#fff;border:none;border-radius:9px;padding:9px 16px;font-size:13px;cursor:pointer;font-weight:600}
+  .btn.ghost{background:#eef1f6;color:var(--ink)}
+  .btn:hover{filter:brightness(1.05)}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;
+    padding:11px 20px;border-radius:10px;font-size:13px;opacity:0;transition:.25s;z-index:60;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toolbar{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+  .sim-btn{background:#fff;border:1.5px solid var(--red);color:var(--red);border-radius:9px;padding:8px 14px;
+    font-size:13px;font-weight:700;cursor:pointer}
+  .sim-btn:hover{background:#fdeaea}
+  .note{font-size:11.5px;color:var(--gray)}
+  @media(max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}.groups,.safe-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>青杉生活超市 · 新店开业筹备数智化平台
+    <span class="pill">只读试点 Demo</span>
+    <span class="pill">AI 不代签 · 安全闸门</span>
+  </h1>
+  <div class="sub">从「人治」到「数治」——AI 依赖识别引擎 · 实时筹备看板 · 智能预警 · 安全硬约束（对应报告 §2.3）</div>
+</header>
+
+<div class="wrap">
+  <div class="note" style="margin-bottom:8px">选择试点门店（数据均为演示用合成数据，对应报告 P0 范围：装修群 / 设备群 / 商品群 三系统只读接入）：</div>
+  <div class="stores" id="stores"></div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="toolbar">
+    <div class="tabs" style="border:none;margin:0;flex:1">
+      <div class="tab active" data-tab="dash">📋 实时筹备看板</div>
+      <div class="tab" data-tab="graph">🕸 AI 依赖图谱</div>
+      <div class="tab" data-tab="alert">🔔 智能预警中心</div>
+      <div class="tab" data-tab="safe">🛡 安全硬闸门</div>
+    </div>
+    <button class="sim-btn" id="simBtn">⚠ 模拟典型事故</button>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="panel active" id="p-dash">
+    <div class="groups" id="groups"></div>
+  </div>
+
+  <!-- GRAPH -->
+  <div class="panel" id="p-graph">
+    <div class="graph-card">
+      <div id="graphHost"></div>
+      <div class="legend">
+        <span><i style="background:var(--green)"></i>已完成</span>
+        <span><i style="background:var(--amber)"></i>进行中/临期</span>
+        <span><i style="background:var(--red)"></i>逾期/阻塞（关键路径）</span>
+        <span><i style="background:var(--gray)"></i>未开始</span>
+        <span><i style="background:#fff;border:1px solid #f3b5b5"></i>虚线=安全闸门依赖</span>
+      </div>
+      <div class="note" id="graphNote" style="margin-top:10px"></div>
+    </div>
+  </div>
+
+  <!-- ALERTS -->
+  <div class="panel" id="p-alert"><div id="alerts"></div></div>
+
+  <!-- SAFETY -->
+  <div class="panel" id="p-safe">
+    <div class="safe-grid" id="safeGrid"></div>
+    <div class="gate-banner" id="gateBanner"></div>
+  </div>
+</div>
+
+<!-- modal -->
+<div class="modal-mask" id="modalMask">
+  <div class="modal">
+    <h3 id="mTitle">提示</h3>
+    <div id="mBody"></div>
+    <div class="row">
+      <button class="btn" id="mOk">知道了</button>
+      <button class="btn ghost" id="mClose">关闭</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============== 演示数据（合成，对应报告痛点场景） ============== */
+const TODAY = new Date('2026-11-05');
+function d(s){return new Date(s);}
+function daysBetween(a,b){return Math.round((b-a)/86400000);}
+
+// 状态: done / prog / over / block / pend ; gate=true 表示安全闸门项
+// 三群: 装修群 deco / 设备群 equi / 商品群 good
+const STORES = {
+  jn:{
+    name:'青杉·江南路店', stage:'试营业前 12 天', tag:'risk', tagText:'⚠ 关键路径阻塞',
+    note:'典型事故场景：冷柜已安装、但「电力增容验收」未完成 → 生鲜到货被安全闸门拦截。',
+    tasks:[
+      {code:'JN-DECO-01',name:'选址签约',group:'deco',owner:'开发部·王磊',status:'done',prog:100,plan:'2026-10-10',up:'10-08',ac:'10-10'},
+      {code:'JN-DECO-02',name:'门店装修施工',group:'deco',owner:'装修群·陈工',status:'done',prog:100,plan:'2026-10-28',up:'10-25',ac:'10-28'},
+      {code:'JN-DECO-03',name:'消防验收（安全闸门）',group:'deco',owner:'安环部·赵队',status:'done',prog:100,plan:'2026-11-02',up:'11-01',ac:'11-02',gate:true},
+      {code:'JN-DECO-04',name:'电力增容验收（安全闸门）',group:'deco',owner:'设备群·李工',status:'over',prog:60,plan:'2026-11-03',up:'11-04',ac:null,gate:true,
+        note:'⚠ 已逾期 2 天，供电局增容手续未闭环，冷柜/生鲜无法带电验收。'},
+      {code:'JN-EQUI-01',name:'中央空调安装',group:'equi',owner:'设备群·李工',status:'done',prog:100,plan:'2026-10-30',up:'10-29',ac:'10-30'},
+      {code:'JN-EQUI-02',name:'冷柜/冰柜安装',group:'equi',owner:'设备群·李工',status:'done',prog:100,plan:'2026-11-01',up:'11-01',ac:null,
+        note:'硬件已就位，但依赖电力增容通电后才能进入「验收」状态。'},
+      {code:'JN-EQUI-03',name:'POS 收银系统部署',group:'equi',owner:'信息部·周敏',status:'done',prog:100,plan:'2026-11-02',up:'11-02',ac:'11-02'},
+      {code:'JN-GOOD-01',name:'货架陈列',group:'good',owner:'商品群·孙倩',status:'done',prog:100,plan:'2026-11-03',up:'11-03',ac:'11-03'},
+      {code:'JN-GOOD-02',name:'生鲜到货入库',group:'good',owner:'商品群·孙倩',status:'block',prog:0,plan:'2026-11-06',up:null,ac:null,
+        note:'🔴 被安全闸门拦截：前置「电力增容」「冷柜安装验收」未达标，系统禁止生鲜入库（避免到货即损耗）。'},
+      {code:'JN-GOOD-03',name:'开业物料采购',group:'good',owner:'商品群·孙倩',status:'done',prog:100,plan:'2026-11-04',up:'11-04',ac:'11-04'},
+      {code:'JN-OPEN-01',name:'开业综合验收',group:'open',owner:'店长·刘俊材',status:'pend',prog:0,plan:'2026-11-17',up:null,ac:null}
+    ],
+    graph:{
+      nodes:[
+        {id:'N1',t:'选址签约',c:'JN-DECO-01',col:0,row:1,st:'done'},
+        {id:'N2',t:'门店装修',c:'JN-DECO-02',col:1,row:1,st:'done'},
+        {id:'N3',t:'消防验收',c:'JN-DECO-03',col:2,row:0,st:'done',gate:true},
+        {id:'N4',t:'电力增容',c:'JN-DECO-04',col:2,row:1,st:'over',gate:true},
+        {id:'N5',t:'冷柜安装',c:'JN-EQUI-02',col:3,row:1,st:'done'},
+        {id:'N6',t:'货架陈列',c:'JN-GOOD-01',col:3,row:2,st:'done'},
+        {id:'N7',t:'生鲜入库',c:'JN-GOOD-02',col:4,row:1,st:'block'},
+        {id:'N8',t:'开业验收',c:'JN-OPEN-01',col:4,row:2,st:'pend'}
+      ],
+      edges:[
+        {f:'N1',t:'N2'},{f:'N2',t:'N3'},{f:'N2',t:'N4'},{f:'N2',t:'N5'},
+        {f:'N4',t:'N5',gate:true},{f:'N4',t:'N7',crit:true,gate:true},
+        {f:'N5',t:'N7',crit:true},{f:'N6',t:'N7'},{f:'N3',t:'N8'},{f:'N7',t:'N8',crit:true}
+      ]
+    }
+  },
+
+  cx:{
+    name:'青杉·城西店', stage:'筹备中 · 进度健康', tag:'ok', tagText:'✓ 关键路径通畅',
+    note:'对照门店：依赖识别完整率达标，无逾期，安全闸门项均已验收。',
+    tasks:[
+      {code:'CX-DECO-01',name:'选址签约',group:'deco',owner:'开发部·王磊',status:'done',prog:100,plan:'2026-10-15',up:'10-13',ac:'10-15'},
+      {code:'CX-DECO-02',name:'门店装修施工',group:'deco',owner:'装修群·陈工',status:'done',prog:100,plan:'2026-11-05',up:'11-04',ac:'11-05'},
+      {code:'CX-DECO-03',name:'消防验收（安全闸门）',group:'deco',owner:'安环部·赵队',status:'done',prog:100,plan:'2026-11-08',up:'11-07',ac:'11-08',gate:true},
+      {code:'CX-DECO-04',name:'电力增容验收（安全闸门）',group:'deco',owner:'设备群·李工',status:'prog',prog:80,plan:'2026-11-10',up:'11-06',ac:null,gate:true},
+      {code:'CX-EQUI-01',name:'中央空调安装',group:'equi',owner:'设备群·李工',status:'done',prog:100,plan:'2026-11-06',up:'11-05',ac:'11-06'},
+      {code:'CX-EQUI-02',name:'冷柜/冰柜安装',group:'equi',owner:'设备群·李工',status:'prog',prog:55,plan:'2026-11-12',up:null,ac:null},
+      {code:'CX-EQUI-03',name:'POS 收银系统部署',group:'equi',owner:'信息部·周敏',status:'prog',prog:40,plan:'2026-11-12',up:null,ac:null},
+      {code:'CX-GOOD-01',name:'货架陈列',group:'good',owner:'商品群·孙倩',status:'pend',prog:0,plan:'2026-11-14',up:null,ac:null},
+      {code:'CX-GOOD-02',name:'生鲜到货入库',group:'good',owner:'商品群·孙倩',status:'pend',prog:0,plan:'2026-11-16',up:null,ac:null},
+      {code:'CX-GOOD-03',name:'开业物料采购',group:'good',owner:'商品群·孙倩',status:'pend',prog:0,plan:'2026-11-13',up:null,ac:null},
+      {code:'CX-OPEN-01',name:'开业综合验收',group:'open',owner:'店长·刘俊材',status:'pend',prog:0,plan:'2026-11-22',up:null,ac:null}
+    ],
+    graph:{
+      nodes:[
+        {id:'N1',t:'选址签约',c:'CX-DECO-01',col:0,row:1,st:'done'},
+        {id:'N2',t:'门店装修',c:'CX-DECO-02',col:1,row:1,st:'done'},
+        {id:'N3',t:'消防验收',c:'CX-DECO-03',col:2,row:0,st:'done',gate:true},
+        {id:'N4',t:'电力增容',c:'CX-DECO-04',col:2,row:1,st:'prog',gate:true},
+        {id:'N5',t:'冷柜安装',c:'CX-EQUI-02',col:3,row:1,st:'prog'},
+        {id:'N6',t:'货架陈列',c:'CX-GOOD-01',col:3,row:2,st:'pend'},
+        {id:'N7',t:'生鲜入库',c:'CX-GOOD-02',col:4,row:1,st:'pend'},
+        {id:'N8',t:'开业验收',c:'CX-OPEN-01',col:4,row:2,st:'pend'}
+      ],
+      edges:[
+        {f:'N1',t:'N2'},{f:'N2',t:'N3'},{f:'N2',t:'N4'},{f:'N2',t:'N5'},
+        {f:'N4',t:'N5',gate:true},{f:'N4',t:'N7',crit:true,gate:true},
+        {f:'N5',t:'N7',crit:true},{f:'N6',t:'N7'},{f:'N3',t:'N8'},{f:'N7',t:'N8',crit:true}
+      ]
+    }
+  },
+
+  gx:{
+    name:'青杉·高新店', stage:'筹备中 · 消防待验', tag:'risk', tagText:'⚠ 消防闸门临期',
+    note:'另一风险场景：冷柜安装逾期，叠加消防验收尚未验收 → 双重闸门压力。',
+    tasks:[
+      {code:'GX-DECO-01',name:'选址签约',group:'deco',owner:'开发部·王磊',status:'done',prog:100,plan:'2026-10-12',up:'10-10',ac:'10-12'},
+      {code:'GX-DECO-02',name:'门店装修施工',group:'deco',owner:'装修群·陈工',status:'done',prog:100,plan:'2026-11-02',up:'11-01',ac:'11-02'},
+      {code:'GX-DECO-03',name:'消防验收（安全闸门）',group:'deco',owner:'安环部·赵队',status:'prog',prog:70,plan:'2026-11-07',up:null,ac:null,gate:true,
+        note:'🔴 距计划验收仅 2 天，喷淋改造未完成，存在闸门临期风险。'},
+      {code:'GX-DECO-04',name:'电力增容验收（安全闸门）',group:'deco',owner:'设备群·李工',status:'done',prog:100,plan:'2026-11-03',up:'11-03',ac:'11-03',gate:true},
+      {code:'GX-EQUI-01',name:'中央空调安装',group:'equi',owner:'设备群·李工',status:'done',prog:100,plan:'2026-10-31',up:'10-30',ac:'10-31'},
+      {code:'GX-EQUI-02',name:'冷柜/冰柜安装',group:'equi',owner:'设备群·李工',status:'over',prog:85,plan:'2026-11-03',up:null,ac:null,
+        note:'⚠ 逾期 2 天，供应商到货延迟。'},
+      {code:'GX-EQUI-03',name:'POS 收银系统部署',group:'equi',owner:'信息部·周敏',status:'prog',prog:50,plan:'2026-11-10',up:null,ac:null},
+      {code:'GX-GOOD-01',name:'货架陈列',group:'good',owner:'商品群·孙倩',status:'pend',prog:0,plan:'2026-11-12',up:null,ac:null},
+      {code:'GX-GOOD-02',name:'生鲜到货入库',group:'good',owner:'商品群·孙倩',status:'pend',prog:0,plan:'2026-11-14',up:null,ac:null},
+      {code:'GX-OPEN-01',name:'开业综合验收',group:'open',owner:'店长·刘俊材',status:'pend',prog:0,plan:'2026-11-20',up:null,ac:null}
+    ],
+    graph:{
+      nodes:[
+        {id:'N1',t:'选址签约',c:'GX-DECO-01',col:0,row:1,st:'done'},
+        {id:'N2',t:'门店装修',c:'GX-DECO-02',col:1,row:1,st:'done'},
+        {id:'N3',t:'消防验收',c:'GX-DECO-03',col:2,row:0,st:'prog',gate:true},
+        {id:'N4',t:'电力增容',c:'GX-DECO-04',col:2,row:1,st:'done',gate:true},
+        {id:'N5',t:'冷柜安装',c:'GX-EQUI-02',col:3,row:1,st:'over'},
+        {id:'N6',t:'货架陈列',c:'GX-GOOD-01',col:3,row:2,st:'pend'},
+        {id:'N7',t:'生鲜入库',c:'GX-GOOD-02',col:4,row:1,st:'pend'},
+        {id:'N8',t:'开业验收',c:'GX-OPEN-01',col:4,row:2,st:'pend'}
+      ],
+      edges:[
+        {f:'N1',t:'N2'},{f:'N2',t:'N3',crit:true,gate:true},{f:'N2',t:'N4'},{f:'N2',t:'N5'},
+        {f:'N4',t:'N5',gate:true},{f:'N4',t:'N7',crit:true,gate:true},
+        {f:'N5',t:'N7',crit:true},{f:'N6',t:'N7'},{f:'N3',t:'N8'},{f:'N7',t:'N8',crit:true}
+      ]
+    }
+  }
+};
+
+const GROUP_META = {
+  deco:{label:'装修群',color:'#2F6FED'},
+  equi:{label:'设备群',color:'#7c3aed'},
+  good:{label:'商品群',color:'#0d9488'},
+  open:{label:'验收开业',color:'#c2410c'}
+};
+const ST_META = {
+  done:{t:'已完成',cls:'s-done',c:'#16a34a'},
+  prog:{t:'进行中',cls:'s-prog',c:'#f59e0b'},
+  over:{t:'已逾期',cls:'s-over',c:'#dc2626'},
+  block:{t:'已拦截',cls:'s-block',c:'#dc2626'},
+  pend:{t:'未开始',cls:'s-pend',c:'#94a3b8'}
+};
+
+let CUR = 'jn';
+
+/* ============== 渲染 ============== */
+function $(id){return document.getElementById(id);}
+
+function renderStores(){
+  $('stores').innerHTML = Object.entries(STORES).map(([k,s])=>`
+    <div class="store-btn ${k===CUR?'active':''}" data-k="${k}">
+      <span class="tag ${s.tag}">${s.tagText}</span>
+      <div class="nm">${s.name}</div>
+      <div class="st">${s.stage}</div>
+    </div>`).join('');
+  document.querySelectorAll('.store-btn').forEach(b=>b.onclick=()=>{CUR=b.dataset.k;renderAll();});
+}
+
+function computeKPI(s){
+  const tasks=s.tasks;
+  const total=tasks.length;
+  const overdue=tasks.filter(t=>t.status==='over'||t.status==='block').length;
+  const delayRate=Math.round(overdue/total*100);
+  const leaks=tasks.filter(t=>t.gate && !t.ac).length; // 安全闸门未验收
+  const done=tasks.filter(t=>t.status==='done').length;
+  const compRate=Math.round(done/total*100);
+  return {total,overdue,delayRate,leaks,compRate};
+}
+
+function renderKPI(){
+  const s=STORES[CUR]; const k=computeKPI(s);
+  const cards=[
+    {lab:'新店延期率（目标 ≤15%）',val:k.delayRate+'%',delta:`基线 32% ↓ ${32-k.delayRate}pt`,
+      bar:k.delayRate,color:k.delayRate<=15?'var(--green)':'var(--red)',cls:k.delayRate<=15?'down':'up'},
+    {lab:'筹备漏项（目标 <3 项）',val:k.leaks+' 项',delta:k.leaks<3?'达标 ✓':'超阈值',
+      bar:Math.min(k.leaks*20,100),color:k.leaks<3?'var(--green)':'var(--red)',cls:k.leaks<3?'down':'up'},
+    {lab:'关键依赖识别完整率',val:'95%',delta:'AI 引擎自动识别 ≥95%',
+      bar:95,color:'var(--blue)',cls:'down'},
+    {lab:'安全验收漏项（红线）',val:k.leaks===0?'零漏项':'需关注',delta:k.leaks===0?'消防/用电/食品 全验收':'存在未验收闸门项',
+      bar:k.leaks===0?100:40,color:k.leaks===0?'var(--green)':'var(--red)',cls:k.leaks===0?'down':'up'}
+  ];
+  $('kpis').innerHTML=cards.map(c=>`
+    <div class="kpi">
+      <div class="lab">${c.lab}</div>
+      <div class="val" style="color:${c.color}">${c.val}</div>
+      <div class="delta ${c.cls}">${c.delta}</div>
+      <div class="bar"><i style="width:${c.bar}%;background:${c.color}"></i></div>
+    </div>`).join('');
+}
+
+function renderDash(){
+  const s=STORES[CUR];
+  const order=['deco','equi','good','open'];
+  $('groups').innerHTML=order.map(g=>{
+    const items=s.tasks.filter(t=>t.group===g);
+    const m=GROUP_META[g];
+    return `<div class="gcol">
+      <h3><span class="dot" style="background:${m.color}"></span>${m.label}
+        <span style="margin-left:auto;font-size:11px;color:var(--gray)">${items.length} 项</span></h3>
+      ${items.map(t=>{
+        const sm=ST_META[t.status];
+        return `<div class="task" data-code="${t.code}">
+          <div class="tn"><span>${t.name}</span>
+            <span class="st-badge ${sm.cls}">${sm.t}${t.gate?'<span class="gate-flag">闸门</span>':''}</span></div>
+          <div class="code">${t.code} · ${t.owner}</div>
+          <div class="meta"><span>计划验收 ${t.plan}</span><span>${t.prog}%</span></div>
+          <div class="prog"><i style="width:${t.prog}%;background:${sm.c}"></i></div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+  document.querySelectorAll('.task').forEach(el=>el.onclick=()=>showTask(el.dataset.code));
+}
+
+function renderGraph(){
+  const s=STORES[CUR]; const g=s.graph;
+  const W=920,H=460, colW=180, rowH=120, x0=40, y0=50, bw=148, bh=50;
+  const pos={};
+  g.nodes.forEach(n=>{ pos[n.id]={x:x0+n.col*colW, y:y0+n.row*rowH, ...n}; });
+  let edgesSvg='';
+  g.edges.forEach(e=>{
+    const a=pos[e.f], b=pos[e.t];
+    const x1=a.x+bw, y1=a.y+bh/2, x2=b.x, y2=b.y+bh/2;
+    const mx=(x1+x2)/2;
+    const dash=e.gate?'stroke-dasharray="6 4"':'';
+    const cls=e.crit?'edge crit':(e.gate?'edge gate':'edge');
+    edgesSvg+=`<path class="${cls}" ${dash} d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}" marker-end="url(#ar${e.crit?'C':(e.gate?'G':'N')})"/>`;
+  });
+  let nodesSvg='';
+  g.nodes.forEach(n=>{
+    const sm=ST_META[n.st]; const c=sm.c;
+    const gateRing=n.gate?'stroke:#dc2626;stroke-width:2.4':'stroke:rgba(0,0,0,.08)';
+    nodesSvg+=`<g class="gnode" transform="translate(${n.x},${n.y})" style="cursor:pointer" onclick="showTask('${n.c}')">
+      <rect width="${bw}" height="${bh}" rx="9" fill="${c}" style="${gateRing}"></rect>
+      <text x="12" y="20">${n.t}</text>
+      <text class="code" x="12" y="38">${n.c}</text>
+    </g>`;
+  });
+  const svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="arN" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#9fb0c8"/></marker>
+      <marker id="arG" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/></marker>
+      <marker id="arC" markerWidth="10" markerHeight="10" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#dc2626"/></marker>
+    </defs>
+    ${edgesSvg}${nodesSvg}
+  </svg>`;
+  $('graphHost').innerHTML=svg;
+  $('graphNote').textContent='图谱解读：'+s.note+' 红色粗线=关键路径阻塞；红色虚线=安全闸门依赖（消防/用电）。点击节点查看任务详情。';
+}
+
+function renderAlerts(){
+  const s=STORES[CUR]; const out=[];
+  s.tasks.forEach(t=>{
+    if(t.status==='over'){
+      out.push({ic:'🔴',cls:'red',hd:`任务逾期：${t.name}（${t.code}）`,
+        bd:`负责人 ${t.owner} 已逾期 ${daysBetween(d('2026-'+t.plan.slice(5)),TODAY)} 天，计划验收 ${t.plan}。AI 已推送超时预警至对应角色。`,
+        tm:'智能提醒引擎 · 实时'});
+    }
+    if(t.status==='block'){
+      out.push({ic:'🚫',cls:'red',hd:`安全闸门拦截：${t.name}（${t.code}）`,
+        bd:(t.note||'前置安全闸门项未达标，系统禁止该任务执行。')+' 如需放行须人工签核并留痕。',
+        tm:'安全硬约束闸门 · 拦截'});
+    }
+    if(t.gate && t.status==='prog'){
+      out.push({ic:'🛡',cls:'red',hd:`安全闸门临期：${t.name}（${t.code}）`,
+        bd:`消防/用电类闸门项尚未验收，距计划 ${t.plan} 不足 3 天，请优先闭环。`,tm:'安全硬约束闸门 · 提醒'});
+    }
+  });
+  if(out.length===0) out.push({ic:'✅',cls:'green',hd:'暂无预警',bd:'当前门店关键路径通畅，安全闸门项均已验收。',tm:'智能提醒引擎'});
+  $('alerts').innerHTML=out.map(a=>`
+    <div class="alert ${a.cls}"><div class="ic">${a.ic}</div>
+      <div><div class="hd">${a.hd}</div><div class="bd">${a.bd}</div><div class="tm">${a.tm}</div></div></div>`).join('');
+}
+
+function renderSafe(){
+  const s=STORES[CUR];
+  const gateItems=s.tasks.filter(t=>t.gate);
+  const cats={
+    '消防验收（安全闸门）':{icon:'🔥',desc:'喷淋/烟感/疏散，验收不可跳过'},
+    '电力增容验收（安全闸门）':{icon:'⚡',desc:'供电增容手续+带电验收，生鲜前置条件'}
+  };
+  let html='';
+  Object.entries(cats).forEach(([name,meta])=>{
+    const items=gateItems.filter(t=>t.name.includes(name.replace('（安全闸门）','')));
+    html+=`<div class="safe-card"><h3>${meta.icon} ${name}</h3>
+      <div class="desc">${meta.desc}</div>
+      ${items.map(t=>{
+        const ok=t.ac && t.status==='done';
+        return `<div class="chk"><input type="checkbox" ${ok?'checked':''} disabled>
+          <span>${t.name}<br><span class="code" style="font-size:10px;color:var(--gray)">${t.code} · ${t.owner}</span></span>
+          ${ok?'<span class="ok">✓ 已验收</span>':'<span class="no">✗ 未验收</span>'}</div>`;
+      }).join('')}
+    </div>`;
+  });
+  // 第三个卡片：综合开门硬约束
+  const allGateOk=gateItems.every(t=>t.ac && t.status==='done');
+  html+=`<div class="safe-card" style="border-top-color:${allGateOk?'var(--green)':'var(--red)'}">
+    <h3>🚪 开业综合闸门</h3>
+    <div class="desc">所有安全闸门项 + 关键路径达标，方可开门营业</div>
+    <div class="chk"><input type="checkbox" ${allGateOk?'checked':''} disabled>
+      <span>消防 / 用电 闸门全验收</span>${allGateOk?'<span class="ok">✓</span>':'<span class="no">✗</span>'}</div>
+    <div class="chk"><input type="checkbox" ${s.tasks.find(t=>t.code.endsWith('GOOD-02')).status!=='block'?'checked':''} disabled>
+      <span>生鲜入库未被拦截</span>${s.tasks.find(t=>t.code.endsWith('GOOD-02')).status!=='block'?'<span class="ok">✓</span>':'<span class="no">✗</span>'}</div>
+    <div class="chk"><input type="checkbox" ${allGateOk?'checked':''} disabled>
+      <span>AI 建议结果 + 人工签核留痕</span>${allGateOk?'<span class="ok">✓</span>':'<span class="no">✗</span>'}</div>
+  </div>`;
+  $('safeGrid').innerHTML=html;
+  const banner = allGateOk
+    ? `<b>✓ 安全闸门通过：</b> 当前门店消防/用电类闸门项均已验收，满足开门硬约束，可进入开业综合验收。`
+    : `<b>🚫 安全闸门拦截（不可代签）：</b> 检测到未验收的安全闸门项（消防/用电），系统<b>拒绝</b>开门与生鲜入库，并强制转人工兜底。AI 仅做提醒，绝不代签验收——对应报告 §2.5 红线。`;
+  $('gateBanner').innerHTML=`<span style="font-size:20px">${allGateOk?'✅':'🛡'}</span><div>${banner}</div>`;
+}
+
+function showTask(code){
+  const s=STORES[CUR]; const t=s.tasks.find(x=>x.code===code);
+  if(!t) return;
+  const sm=ST_META[t.status];
+  let dep=s.graph.edges.filter(e=>{
+    const n=s.graph.nodes.find(x=>x.id===e.t);
+    return n && n.c===code;
+  }).map(e=>{const f=s.graph.nodes.find(x=>x.id===e.f);return f?f.t:'?';});
+  const html=`
+    <p><b>业务编号：</b><span style="font-family:ui-monospace,monospace">${t.code}</span>
+       ${t.gate?'<span style="color:var(--red);font-weight:700"> · 安全闸门项</span>':''}</p>
+    <p><b>当前状态：</b><span style="color:${sm.c};font-weight:700">${sm.t}</span> · 进度 ${t.prog}%</p>
+    <p><b>所属群 / 负责人：</b>${GROUP_META[t.group].label} / ${t.owner}</p>
+    <p><b>计划验收：</b>${t.plan}${t.ac?(' · <b style="color:var(--green)">已验收 '+t.ac+'</b>'):' · <b style="color:var(--red)">尚未验收</b>'}
+       ${t.up?(' · 上传 '+t.up):''}</p>
+    ${dep.length?`<p><b>前置依赖：</b>${dep.join('、')}</p>`:''}
+    ${t.note?`<p style="background:#f6f8fc;padding:8px 10px;border-radius:8px">${t.note}</p>`:''}
+    <p class="note">审计留痕：业务编号 / 资料版本 / 事实引用 / 建议结果 / 人工改动 / 签核人 —— 全程可追溯（只读试点，AI 不代签）。</p>`;
+  openModal(t.name, html);
+}
+
+function openModal(title,body){
+  $('mTitle').textContent=title; $('mBody').innerHTML=body;
+  $('modalMask').classList.add('show');
+}
+function toast(msg){
+  const t=$('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* 模拟典型事故 */
+function simulate(){
+  const s=STORES[CUR];
+  const cold=s.tasks.find(t=>t.code.endsWith('EQUI-02'));
+  const power=s.tasks.find(t=>t.code.endsWith('DECO-04'));
+  const fresh=s.tasks.find(t=>t.code.endsWith('GOOD-02'));
+  if(fresh.status==='block'){
+    openModal('⚠ 典型事故已复现（'+s.name+'）',`
+      <p>场景：<b>${cold.name}</b> 已完成（设备就位），但 <b style="color:var(--red)">${power.name}</b> 尚未验收。</p>
+      <p>此时若「生鲜到货入库」按原计划执行 → 冷柜无电、生鲜到货即损耗。</p>
+      <p style="background:#fdeaea;padding:9px 11px;border-radius:8px;color:#7f1d1d">
+        🛡 <b>安全硬闸门已自动拦截</b>「${fresh.name}」：系统检测到前置安全闸门项未达标，<b>禁止入库</b>，并将事件转人工兜底 + 审计留痕。这正是报告所述「从人盯到数治」的核心价值。</p>
+      <p class="note">对照现状：无该系统时，店长需 6 小时/周人工汇总仍易漏此项 → 延期率 32%、漏项 11 项/店。</p>`);
+  }else{
+    toast('当前门店关键路径通畅，未触发拦截（可切换到「江南路店」体验典型事故）');
+  }
+}
+
+function renderAll(){
+  renderStores(); renderKPI(); renderDash(); renderGraph(); renderAlerts(); renderSafe();
+}
+
+/* tabs */
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  t.classList.add('active');
+  $('p-'+t.dataset.tab).classList.add('active');
+});
+$('simBtn').onclick=simulate;
+$('mOk').onclick=()=>$('modalMask').classList.remove('show');
+$('mClose').onclick=()=>$('modalMask').classList.remove('show');
+$('modalMask').onclick=e=>{if(e.target===$('modalMask'))$('modalMask').classList.remove('show');};
+
+renderAll();
+</script>
+</body>
+</html>
