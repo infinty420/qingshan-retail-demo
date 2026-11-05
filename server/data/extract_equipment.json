@@ -1,0 +1,13 @@
+[
+  {"asset_no":"EQ-JN-01","store":"JN","device":"中央空调安装","grp":"equi","install_st":"已安装","plan_dt":"2026-10-30","accept_dt":"2026-10-30","owner":"设备群·李工"},
+  {"asset_no":"EQ-JN-02","store":"JN","device":"冷柜/冰柜安装","grp":"equi","install_st":"已安装","plan_dt":"2026-11-01","accept_dt":null,"owner":"设备群·李工","note":"硬件已就位，但依赖电力增容通电后才能进入验收状态。"},
+  {"asset_no":"EQ-JN-03","store":"JN","device":"POS收银系统部署","grp":"equi","install_st":"已安装","plan_dt":"2026-11-02","accept_dt":"2026-11-02","owner":"信息部·周敏"},
+
+  {"asset_no":"EQ-CX-01","store":"CX","device":"中央空调安装","grp":"equi","install_st":"已安装","plan_dt":"2026-11-06","accept_dt":"2026-11-06","owner":"设备群·李工"},
+  {"asset_no":"EQ-CX-02","store":"CX","device":"冷柜/冰柜安装","grp":"equi","install_st":"安装中","plan_dt":"2026-11-12","accept_dt":null,"owner":"设备群·李工"},
+  {"asset_no":"EQ-CX-03","store":"CX","device":"POS收银系统部署","grp":"equi","install_st":"安装中","plan_dt":"2026-11-12","accept_dt":null,"owner":"信息部·周敏"},
+
+  {"asset_no":"EQ-GX-01","store":"GX","device":"中央空调安装","grp":"equi","install_st":"已安装","plan_dt":"2026-10-31","accept_dt":"2026-10-31","owner":"设备群·李工"},
+  {"asset_no":"EQ-GX-02","store":"GX","device":"冷柜/冰柜安装","grp":"equi","install_st":"逾期","plan_dt":"2026-11-03","accept_dt":null,"owner":"设备群·李工","note":"⚠ 逾期，供应商到货延迟。"},
+  {"asset_no":"EQ-GX-03","store":"GX","device":"POS收银系统部署","grp":"equi","install_st":"安装中","plan_dt":"2026-11-10","accept_dt":null,"owner":"信息部·周敏"}
+]
