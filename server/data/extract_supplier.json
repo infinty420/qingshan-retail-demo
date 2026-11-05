@@ -1,0 +1,13 @@
+[
+  {"po_no":"SP-JN-01","store":"JN","item":"货架陈列","ship_st":"已到货","eta_dt":"2026-11-03","recv_dt":"2026-11-03","vendor":"商品群·孙倩","owner":"商品群·孙倩"},
+  {"po_no":"SP-JN-02","store":"JN","item":"生鲜到货入库","ship_st":"被拦截","eta_dt":"2026-11-06","recv_dt":null,"vendor":"商品群·孙倩","owner":"商品群·孙倩","note":"🔴 被安全闸门拦截：前置电力增容/冷柜验收未达标，系统禁止生鲜入库（避免到货即损耗）。"},
+  {"po_no":"SP-JN-03","store":"JN","item":"开业物料采购","ship_st":"已到货","eta_dt":"2026-11-04","recv_dt":"2026-11-04","vendor":"商品群·孙倩","owner":"商品群·孙倩"},
+
+  {"po_no":"SP-CX-01","store":"CX","item":"货架陈列","ship_st":"未下单","eta_dt":"2026-11-14","recv_dt":null,"vendor":"商品群·孙倩","owner":"商品群·孙倩"},
+  {"po_no":"SP-CX-02","store":"CX","item":"生鲜到货入库","ship_st":"未下单","eta_dt":"2026-11-16","recv_dt":null,"vendor":"商品群·孙倩","owner":"商品群·孙倩"},
+  {"po_no":"SP-CX-03","store":"CX","item":"开业物料采购","ship_st":"未下单","eta_dt":"2026-11-13","recv_dt":null,"vendor":"商品群·孙倩","owner":"商品群·孙倩"},
+
+  {"po_no":"SP-GX-01","store":"GX","item":"货架陈列","ship_st":"未下单","eta_dt":"2026-11-12","recv_dt":null,"vendor":"商品群·孙倩","owner":"商品群·孙倩"},
+  {"po_no":"SP-GX-02","store":"GX","item":"生鲜到货入库","ship_st":"未下单","eta_dt":"2026-11-14","recv_dt":null,"vendor":"商品群·孙倩","owner":"商品群·孙倩"},
+  {"po_no":"SP-GX-03","store":"GX","item":"开业物料采购","ship_st":"未下单","eta_dt":"2026-11-13","recv_dt":null,"vendor":"商品群·孙倩","owner":"商品群·孙倩"}
+]
